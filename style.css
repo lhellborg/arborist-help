@@ -37,3 +37,4 @@ footer{text-align:center;color:var(--muted);font-size:.8rem;padding:0 16px 24px}
 figure{margin:0}figure svg{width:100%;height:auto;background:var(--bg);border:1px solid var(--line);border-radius:10px}
 figcaption{font-size:.9rem;color:var(--muted);margin-top:4px}
 .links{margin-top:10px!important}.links a{color:var(--accent)}
+.row select{min-width:0}

@@ -2,7 +2,9 @@
   var MONTHS = ["januari","februari","mars","april","maj","juni","juli","augusti","september","oktober","november","december"];
   var SHORT = MONTHS.map(function (m) { return m.slice(0, 3); });
   var plants = window.PLANTS.slice().sort(function (a, b) { return a.n.localeCompare(b.n, "sv"); });
-  var state = { month: 0, group: "", q: "" };
+  var state = { month: 0, group: "", q: "", zone: 0 };
+  try { state.zone = +localStorage.getItem("zone") || 0; } catch (e) {}
+  function maxZone(p) { var m = /(\d)\s*[–-]\s*(\d)/.exec(p.z || ""); return m ? +m[2] : 8; }
   var BLOOM = {
     year: ["Blommar på årsskott", "Nya skott bär blommorna, så du kan beskära hårt på vintern eller tidig vår."],
     old: ["Blommar på fjolårsved", "Blomknopparna bildas året innan. Beskär direkt efter blomning, annars tar du bort årets blommor."],
@@ -13,7 +15,7 @@
 
   var $q = document.getElementById("q"), $months = document.getElementById("months"),
       $group = document.getElementById("group"), $list = document.getElementById("list"),
-      $count = document.getElementById("count");
+      $count = document.getElementById("count"), $zone = document.getElementById("zone");
 
   function norm(s) { return s.toLowerCase().trim(); }
   function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
@@ -53,6 +55,7 @@
     var res = plants.filter(function (p) {
       if (month && p.m.indexOf(month) < 0) return false;
       if (state.group && p.g !== state.group) return false;
+      if (state.zone && maxZone(p) < state.zone) return false;
       if (q && (p.n + " " + p.l + " " + p.g).toLowerCase().indexOf(q) < 0) return false;
       return true;
     });
@@ -66,10 +69,10 @@
       }
       return '<details class="card"' + (res.length === 1 ? " open" : "") + '><summary>' +
         '<div class="name">' + p.n + '</div><div class="latin">' + p.l + '</div>' +
-        '<div class="tag">' + p.g + '</div>' +
+        '<div class="tag">' + p.g + ' · zon ' + p.z.split(" ")[0] + ' · ' + p.ht.split(" (")[0] + '</div>' +
         (p.b ? '<div class="bloom ' + p.b + '">🌸 ' + BLOOM[p.b][0] + '</div>' : '') +
         '<div class="strip">' + strip + '</div><div class="strip-l">' + lab + '</div></summary>' +
-        '<div class="body">' + (p.b ? '<h3>Blomning</h3><p>' + BLOOM[p.b][0] + '. ' + BLOOM[p.b][1] + '</p>' : '') + '<h3>När</h3><p>' + p.w + '</p><h3>Hur</h3><p>' + p.h + '</p>' +
+        '<div class="body"><h3>Fakta</h3><p>Zon ' + p.z + '<br>Höjd: ' + p.ht + '<br>Jord och läge: ' + p.jm + '</p>' + (p.b ? '<h3>Blomning</h3><p>' + BLOOM[p.b][0] + '. ' + BLOOM[p.b][1] + '</p>' : '') + '<h3>När</h3><p>' + p.w + '</p><h3>Hur</h3><p>' + p.h + '</p>' +
         (p.t ? '<h3>Metoder (se guiden överst)</h3><p>' + p.t.split(" ").map(function (t) { return TECH[t]; }).join(", ") + '</p>' : '') +
         '<p class="links"><a target="_blank" rel="noopener" href="https://www.google.com/search?tbm=isch&q=' + encodeURIComponent(p.n + " " + p.l) + '">📷 Se bilder ↗</a></p></div></details>';
     }).join("");
@@ -78,6 +81,9 @@
   $q.addEventListener("input", function () { state.q = $q.value; if (monthFromQuery($q.value)) state.month = 0; render(); });
   $group.addEventListener("change", function () { state.group = $group.value; render(); });
 
+  $zone.innerHTML = '<option value="0">Alla zoner</option>' + [1,2,3,4,5,6,7,8].map(function (z) { return '<option value="' + z + '">Min zon: ' + z + '</option>'; }).join("");
+  $zone.value = String(state.zone);
+  $zone.addEventListener("change", function () { state.zone = +$zone.value; try { localStorage.setItem("zone", state.zone); } catch (e) {} render(); });
   buildControls();
   render();
   if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(function () {});

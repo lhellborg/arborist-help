@@ -12,7 +12,10 @@ Webbapp som visar när och hur du beskär trädgårdsväxter.
 
 **Filtrera grupp:** välj en grupp i listan under månadsknapparna, till exempel Fruktträd, Rosor eller Häckar.
 
+**Välj din zon:** välj "Min zon" i listan, så döljs växter som inte klarar din odlingszon (Sveriges zoner 1–8, där 1 är sydligast). Valet sparas i telefonen.
+
 **Läs mer om en växt:** tryck på växtens kort. Där finns:
+- **Fakta:** odlingszon, ungefärlig höjd som fullvuxen och jordmån och läge.
 - **Blomning:** om växten blommar på årsskott eller fjolårsved. Det avgör om du ska beskära före eller efter blomning.
 - **När:** bästa tidpunkt.
 - **Hur:** hur du beskär.
@@ -32,11 +35,11 @@ Appen sparas i telefonen och fungerar även utan nät.
 
 ## Om innehållet
 
-Texterna är egna sammanfattningar och riktlinjer, inte text ur någon bok. Anpassa efter din odlingszon, växtens ålder och vädret. Jämför gärna med din egen beskärningsbok.
+Texterna är egna sammanfattningar och riktlinjer, inte text ur någon bok. Zon, höjd och jordmån är ungefärliga och varierar med sort och läge. Anpassa efter din odlingszon, växtens ålder och vädret. Jämför gärna med din egen beskärningsbok.
 
 ## Lägg till eller ändra växter
 
-All växtdata ligger i `plants.js`. Varje växt har bland annat `m` (bästa månader, 1–12), `b` (blommar på årsskott eller fjolårsved) och `t` (beskärningsmetoder).
+All växtdata ligger i `plants.js`. Varje växt har bland annat `m` (bästa månader, 1–12), `b` (blommar på årsskott eller fjolårsved) och `t` (beskärningsmetoder), `z` (zon), `ht` (höjd) och `jm` (jordmån).
 
 ## Kör lokalt
 
