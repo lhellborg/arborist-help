@@ -4,6 +4,10 @@
   var plants = window.PLANTS.slice().sort(function (a, b) { return a.n.localeCompare(b.n, "sv"); });
   var state = { month: 0, group: "", q: "", zone: 0 };
   try { state.zone = +localStorage.getItem("zone") || 0; } catch (e) {}
+  plants.forEach(function (p, i) { p._i = i; });
+  var MINE = [];
+  try { MINE = JSON.parse(localStorage.getItem("mine") || "[]").filter(function (i) { return plants[i]; }); } catch (e) { MINE = []; }
+  function saveMine() { try { localStorage.setItem("mine", JSON.stringify(MINE)); } catch (e) {} }
   var tab = "prune";
   var G = { q: "", sun: "", wat: "", jt: "", hm: 0, group: "", pol: false, months: [] };
   function maxZone(p) { var m = /(\d)\s*[–-]\s*(\d)/.exec(p.z || ""); return m ? +m[2] : 8; }
@@ -124,7 +128,7 @@
     state.zone = z; $zone.value = String(z); $gzone.value = String(z);
     try { localStorage.setItem("zone", z); } catch (e) {}
   }
-  function gardenMatches(p) {
+  function gardenMatches(p, skipMonths) {
     if (G.q && (p.n + " " + p.l).toLowerCase().indexOf(norm(G.q)) < 0) return false;
     if (G.sun && (p.sun || "").indexOf(G.sun) < 0) return false;
     if (G.wat) {
@@ -136,7 +140,7 @@
     if (G.hm && p.hm > G.hm) return false;
     if (G.group && p.g !== G.group) return false;
     if (G.pol && !p.pol) return false;
-    if (G.months.length && coverage(p) === 0) return false;
+    if (!skipMonths && G.months.length && coverage(p) === 0) return false;
     return true;
   }
   function coverage(p) {
@@ -165,7 +169,55 @@
       icons(p) + cov + (p.bt && p.bt.length ? bloomStrip(p) : '') + '</summary>' +
       '<div class="body"><h3>Fakta</h3><p>' + factsText(p) + '</p>' +
       '<h3>Beskärning</h3><p>' + p.w + ' <span class="tag">(se fliken Beskärning)</span></p>' +
-      '<p class="links"><a target="_blank" rel="noopener" href="https://www.google.com/search?tbm=isch&q=' + encodeURIComponent(p.n + " " + p.l) + '">📷 Se bilder ↗</a></p></div></details>';
+      '<p class="links"><a target="_blank" rel="noopener" href="https://www.google.com/search?tbm=isch&q=' + encodeURIComponent(p.n + " " + p.l) + '">📷 Se bilder ↗</a></p>' +
+      addBtn(p) + '</div></details>';
+  }
+  function addBtn(p) {
+    var has = MINE.indexOf(p._i) >= 0;
+    return '<button type="button" class="addbtn' + (has ? " has" : "") + '" data-i="' + p._i + '">' + (has ? "✓ I min trädgård (ta bort)" : "+ Lägg till i min trädgård") + '</button>';
+  }
+  function toggleMine(i) {
+    var k = MINE.indexOf(i);
+    if (k >= 0) MINE.splice(k, 1); else MINE.push(i);
+    saveMine();
+    Array.prototype.forEach.call(document.querySelectorAll(".addbtn[data-i=\"" + i + "\"]"), function (b) {
+      var has = MINE.indexOf(i) >= 0;
+      b.classList.toggle("has", has);
+      b.textContent = has ? "✓ I min trädgård (ta bort)" : "+ Lägg till i min trädgård";
+    });
+    renderMine();
+  }
+  function renderMine() {
+    var el = document.getElementById("mine");
+    if (!MINE.length) {
+      el.innerHTML = '<details class="card mine"><summary><div class="name">🏡 Min trädgård</div><div class="tag">Tom. Fäll ut en växt och tryck "Lägg till i min trädgård" för att se när din trädgård blommar.</div></summary></details>';
+      return;
+    }
+    var mine = MINE.map(function (i) { return plants[i]; });
+    var counts = [], i;
+    for (i = 1; i <= 12; i++) counts[i] = mine.filter(function (p) { return (p.bt || []).indexOf(i) >= 0; }).length;
+    var max = Math.max.apply(null, counts.slice(1).concat([1]));
+    var gaps = [];
+    for (i = 4; i <= 10; i++) if (!counts[i]) gaps.push(i);
+    var cal = "";
+    for (i = 1; i <= 12; i++) {
+      var isGap = i >= 4 && i <= 10 && !counts[i];
+      cal += '<button type="button" class="mcell' + (isGap ? " gap" : "") + '" data-m="' + i + '" aria-label="' + cap(MONTHS[i - 1]) + ': ' + counts[i] + ' blommande växter' + (isGap ? ", lucka" : "") + '">' +
+        '<span class="mbarw"><span class="mbar" style="height:' + Math.round((counts[i] / max) * 44) + 'px"></span></span>' +
+        '<span class="mn">' + counts[i] + '</span><span class="ml">' + SHORT[i - 1] + '</span></button>';
+    }
+    var pol = mine.filter(function (p) { return p.pol; }).length;
+    var sug = gaps.slice(0, 3).map(function (m) {
+      var c = plants.filter(function (p) { return MINE.indexOf(p._i) < 0 && (p.bt || []).indexOf(m) >= 0 && gardenMatches(p, true); })
+        .sort(function (x, y) { return (y.pol ? 1 : 0) - (x.pol ? 1 : 0) || y.bt.length - x.bt.length || x.n.localeCompare(y.n, "sv"); }).slice(0, 3);
+      return '<div class="sugrow"><b>' + cap(MONTHS[m - 1]) + ':</b> ' + (c.length ? c.map(function (p) { return '<button type="button" class="sug" data-i="' + p._i + '">+ ' + p.n + '</button>'; }).join(" ") : "inga förslag med dina filter") + '</div>';
+    }).join("");
+    el.innerHTML = '<details class="card mine" open><summary><div class="name">🏡 Min trädgård (' + mine.length + ')</div>' +
+      '<div class="tag">🐝 ' + pol + ' av ' + mine.length + ' är bra för pollinerare' + (gaps.length ? ' · ⚠️ lucka: ' + gaps.map(function (m) { return MONTHS[m - 1]; }).join(", ") : ' · 🌸 blommor april–oktober') + '</div></summary>' +
+      '<div class="body"><h3>Blommande växter per månad</h3><div class="mcal">' + cal + '</div>' +
+      (gaps.length ? '<p class="tag">Månader utan blommor (april–oktober) är markerade. Tryck på en månad för att hitta växter som blommar då.</p>' + '<h3>Förslag som fyller luckorna</h3>' + sug : '') +
+      '<h3>Dina växter</h3><div class="mlist">' + mine.map(function (p) { return '<button type="button" class="mrm" data-rm="' + p._i + '">' + p.n + ' ✕</button>'; }).join(" ") + '</div>' +
+      '<p><button type="button" class="chip" id="mclear">Töm listan</button></p></div></details>';
   }
   function renderGarden() {
     Array.prototype.forEach.call($gmonths.children, function (c) {
@@ -175,6 +227,7 @@
     var res = plants.filter(gardenMatches);
     if (G.months.length) res.sort(function (a, b) { return coverage(b) - coverage(a) || (b.pol ? 1 : 0) - (a.pol ? 1 : 0) || a.n.localeCompare(b.n, "sv"); });
     $gcount.textContent = res.length + " växter";
+    renderMine();
     $glist.innerHTML = res.length ? res.map(gardenCard).join("") : '<div class="empty">Inga växter matchar. Prova att ta bort något filter.</div>';
   }
   function buildGarden() {
@@ -201,6 +254,13 @@
     document.getElementById("gpol").addEventListener("change", function (e) { G.pol = e.target.checked; renderGarden(); });
     $gq.addEventListener("input", function () { G.q = $gq.value; renderGarden(); });
     $gzone.addEventListener("change", function () { setZone(+$gzone.value); renderGarden(); });
+    document.getElementById("gardenView").addEventListener("click", function (e) {
+      var t = e.target.closest("button"); if (!t) return;
+      if (t.dataset.i !== undefined) { toggleMine(+t.dataset.i); return; }
+      if (t.dataset.rm !== undefined) { toggleMine(+t.dataset.rm); return; }
+      if (t.id === "mclear") { if (confirm("Tömma Min trädgård?")) { MINE.slice().forEach(toggleMine); } return; }
+      if (t.classList.contains("mcell")) { G.months = [+t.dataset.m]; renderGarden(); document.getElementById("glist").scrollIntoView({ behavior: "smooth" }); }
+    });
     document.getElementById("greset").onclick = function () {
       G = { q: "", sun: "", wat: "", jt: "", hm: 0, group: "", pol: false, months: [] };
       ["gsun", "gwat", "gjt", "ghm", "ggroup"].forEach(function (id) { document.getElementById(id).selectedIndex = 0; });

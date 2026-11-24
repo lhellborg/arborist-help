@@ -6,6 +6,10 @@ Webbapp som visar när och hur du beskär trädgårdsväxter.
 
 ## Så använder du appen
 
+Appen har två flikar: **✂️ Beskärning** (när och hur du beskär) och **🌱 Trädgårdshjälpen** (hitta växter till din trädgård).
+
+### Fliken Beskärning
+
 **Sök växt:** skriv i sökrutan, till exempel `rosor`, `äpple` eller ett latinskt namn.
 
 **Sök månad:** skriv en månad, till exempel `april`, så visas de växter som passar bäst att beskära då. Du kan också trycka på en månadsknapp. Nuvarande månad är fetmarkerad. Tryck igen för att ta bort filtret.
@@ -28,6 +32,21 @@ Månadsremsan på varje kort visar bästa månader (januari–december).
 
 **Guiden:** överst finns "✂️ Så beskär du" med enkla bilder av fem grundmetoder: snitt ovanför knopp, tunna ut vid basen, ner till marken, häckklippning samt borttagning av död och korsande ved.
 
+### Fliken Trädgårdshjälpen
+
+Välj vilka förhållanden du har, så får du växter som passar. Filter:
+- **Ljus:** sol, halvskugga eller skugga.
+- **Jordfuktighet:** torr, normal eller fuktig.
+- **Zon:** din odlingszon (delas med beskärningsfliken).
+- **Jordtyp:** sandig, lerig, mullrik, sur eller kalkrik.
+- **Max höjd:** växtens höjd som fullvuxen.
+- **Grupp:** till exempel Perenner, Buskar eller Häckar.
+- **🐝 Bra för pollinerare** och **Blommar i:** välj en eller flera månader. Med "☀️ Hela sommaren" får du växter som blommar i juni–augusti. Växter som blommar i flest av de valda månaderna visas först.
+
+**Min trädgård:** i varje växtkort finns knappen "Lägg till i min trädgård". Överst visas då en **blomningskalender** med hur många av dina växter som blommar varje månad. Månader utan blommor (april–oktober) markeras som luckor, med förslag på växter som fyller dem. Tryck på en månad för att filtrera fram växter som blommar då. Listan sparas i telefonen.
+
+Appen har 108 växter: träd, buskar, klätterväxter, häckar och 33 perenner.
+
 ## Lägg appen på mobilen
 
 - **iPhone (Safari):** Dela → Lägg till på hemskärmen.
@@ -41,7 +60,7 @@ Texterna är egna sammanfattningar och riktlinjer, inte text ur någon bok. Zon,
 
 ## Lägg till eller ändra växter
 
-All växtdata ligger i `plants.js`. Varje växt har bland annat `m` (bästa månader, 1–12), `b` (blommar på årsskott eller fjolårsved) och `t` (beskärningsmetoder), `z` (zon), `ht` (höjd) och `jm` (jordmån), `sun` (ljus), `wat` (vatten) `bt` (blomningstid) och `pol` (bra för pollinerare).
+All växtdata ligger i `plants.js`. Varje växt har bland annat `m` (bästa månader, 1–12), `b` (blommar på årsskott eller fjolårsved) och `t` (beskärningsmetoder), `z` (zon), `ht` (höjd) och `jm` (jordmån), `sun` (ljus), `wat` (vatten) `bt` (blomningstid) `pol` (bra för pollinerare), `jt` (jordtyper) och `hm` (största höjd i meter).
 
 ## Kör lokalt
 
