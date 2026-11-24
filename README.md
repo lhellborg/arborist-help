@@ -27,7 +27,7 @@ Appen har två flikar: **✂️ Beskärning** (när och hur du beskär) och **�
 - **Förökning:** hur växten förökas (🌰 frö, ✂️ sticklingar, 🔀 delning, ↩️ avläggare, 🌱 rotskott/utlöpare, 🍎 ympning) och när det görs.
 - **📷 Se bilder:** en bildsökning på växten.
 
-**Ikoner på korten:** ☀️ sol, ⛅ halvskugga, ☁️ skugga, 🌵 torktålig, 💧 normalt vattenbehov, 💦 vattenkrävande 🌸 blomningstid och 🐝 bra för pollinerare. Teckenförklaringen finns också i guiden.
+**Ikoner på korten:** ☀️ sol, ⛅ halvskugga, ☁️ skugga, 🌵 torktålig, 💧 normalt vattenbehov, 💦 vattenkrävande 🌸 blomningstid 🐝 bra för pollinerare och skötsel (🟢 lättskött, 🟡 medelsvår, 🔴 kräver mer omsorg). Teckenförklaringen finns också i guiden.
 
 Månadsremsan på varje kort visar bästa månader (januari–december).
 
@@ -45,6 +45,7 @@ Välj vilka förhållanden du har, så får du växter som passar. Filter:
 - **Max höjd:** växtens höjd som fullvuxen.
 - **Grupp:** till exempel Perenner, Buskar eller Häckar.
 - **Förökning:** visa bara växter som kan förökas på ett visst sätt, till exempel med sticklingar eller delning.
+- **Skötsel:** visa bara lättskötta växter, eller lätta och medelsvåra.
 - **🐝 Bra för pollinerare** och **Blommar i:** välj en eller flera månader. Med "☀️ Hela sommaren" får du växter som blommar i juni–augusti. Växter som blommar i flest av de valda månaderna visas först.
 
 **🌱 Förökningsguide:** i fliken finns en guide med enkla bilder, steg för steg, för sex metoder: frö (kall stratifiering), vedstickling, grön stickling, delning av perenner, avläggare samt rotskott och utlöpare. Under varje metod finns en knapp som visar växter som kan förökas på det sättet.
@@ -66,7 +67,7 @@ Texterna är egna sammanfattningar och riktlinjer, inte text ur någon bok. Zon,
 
 ## Lägg till eller ändra växter
 
-All växtdata ligger i `plants.js` och klematissorterna i `clematis.js`. Varje växt har bland annat `m` (bästa månader, 1–12), `b` (blommar på årsskott eller fjolårsved) och `t` (beskärningsmetoder), `z` (zon), `ht` (höjd) och `jm` (jordmån), `sun` (ljus), `wat` (vatten) `bt` (blomningstid) `pol` (bra för pollinerare), `jt` (jordtyper), `hm` (största höjd i meter), `fo` (förökningssätt) och `ft` (förökningsanvisning).
+All växtdata ligger i `plants.js` och klematissorterna i `clematis.js`. Varje växt har bland annat `m` (bästa månader, 1–12), `b` (blommar på årsskott eller fjolårsved) och `t` (beskärningsmetoder), `z` (zon), `ht` (höjd) och `jm` (jordmån), `sun` (ljus), `wat` (vatten) `bt` (blomningstid) `pol` (bra för pollinerare), `jt` (jordtyper), `hm` (största höjd i meter), `fo` (förökningssätt) `ft` (förökningsanvisning), `sk` (skötselnivå) och `sn` (förklaring).
 
 ## Kör lokalt
 

@@ -9,7 +9,7 @@
   try { MINE = JSON.parse(localStorage.getItem("mine") || "[]").filter(function (i) { return plants[i]; }); } catch (e) { MINE = []; }
   function saveMine() { try { localStorage.setItem("mine", JSON.stringify(MINE)); } catch (e) {} }
   var tab = "prune";
-  var G = { q: "", sun: "", wat: "", jt: "", hm: 0, group: "", prop: "", pol: false, months: [] };
+  var G = { q: "", sun: "", wat: "", jt: "", hm: 0, group: "", prop: "", care: "", pol: false, months: [] };
   function maxZone(p) { var z = p.z || "", m = /(\d)\s*[–-]\s*(\d)/.exec(z) || /^\s*(\d)/.exec(z); return m ? +m[m.length - 1] : 8; }
   var BLOOM = {
     year: ["Blommar på årsskott", "Nya skott bär blommorna, så du kan beskära hårt på vintern eller tidig vår."],
@@ -31,8 +31,11 @@
     if (!p.fo) return "";
     return '<h3>Förökning</h3><div class="icons">' + p.fo.split(" ").map(function (c) { return '<span class="ic">' + PROP[c][0] + ' ' + PROP[c][1] + '</span>'; }).join("") + '</div><p>' + p.ft + '</p>';
   }
+  var CARE = { l: ["🟢", "Lättskött"], m: ["🟡", "Medelsvår"], s: ["🔴", "Kräver mer omsorg"] };
+  function careLine(p) { return p.sk ? '<br>Skötsel: ' + CARE[p.sk][1] + (p.sn ? ' (' + p.sn + ')' : '') : ''; }
   function icons(p) {
     var h = "";
+    if (p.sk) h += '<span class="ic" title="' + CARE[p.sk][1] + '" aria-label="' + CARE[p.sk][1] + '">' + CARE[p.sk][0] + '</span>';
     (p.sun || "").split("").forEach(function (c) { h += '<span class="ic" title="' + SUN[c][1] + '" aria-label="' + SUN[c][1] + '">' + SUN[c][0] + '</span>'; });
     if (p.wat) h += '<span class="ic" title="' + WAT[p.wat][1] + '" aria-label="' + WAT[p.wat][1] + '">' + WAT[p.wat][0] + '</span>';
     if (p.pol) h += '<span class="ic" title="Bra för pollinerare" aria-label="Bra för pollinerare">🐝</span>';
@@ -102,7 +105,7 @@
         '<div class="tag">' + p.g + ' · zon ' + p.z.split(" ")[0] + ' · ' + p.ht.split(" (")[0] + '</div>' +
         icons(p) + (p.b ? '<div class="bloom ' + p.b + '">🌿 ' + BLOOM[p.b][0] + '</div>' : '') +
         '<div class="strip">' + strip + '</div><div class="strip-l">' + lab + '</div></summary>' +
-        '<div class="body"><details class="facts"><summary>Fakta</summary><p>Zon ' + p.z + '<br>Höjd: ' + p.ht + '<br>Jord och läge: ' + p.jm + '<br>Ljus: ' + (p.sun || "").split("").map(function (c) { return SUN[c][1].toLowerCase(); }).join(", ") + '<br>Vatten: ' + (p.wat ? WAT[p.wat][1].toLowerCase() : "") + (p.bt && p.bt.length ? '<br>Blomningstid: ' + bloomTime(p.bt) : '') + (p.pol ? '<br>🐝 Bra för pollinerare (bin, humlor och fjärilar)' : '') + '</p></details>' + (p.b ? '<h3>Blomning</h3><p>' + BLOOM[p.b][0] + '. ' + BLOOM[p.b][1] + '</p>' : '') + '<h3>När</h3><p>' + p.w + '</p><h3>Hur</h3><p>' + p.h + '</p>' +
+        '<div class="body"><details class="facts"><summary>Fakta</summary><p>' + factsText(p) + '</p></details>' + (p.b ? '<h3>Blomning</h3><p>' + BLOOM[p.b][0] + '. ' + BLOOM[p.b][1] + '</p>' : '') + '<h3>När</h3><p>' + p.w + '</p><h3>Hur</h3><p>' + p.h + '</p>' +
         (p.t ? '<h3>Metoder (se guiden överst)</h3><p>' + p.t.split(" ").map(function (t) { return TECH[t]; }).join(", ") + '</p>' : '') +
         propHtml(p) +
         '<p class="links"><a target="_blank" rel="noopener" href="https://www.google.com/search?tbm=isch&q=' + encodeURIComponent(p.n + " " + p.l) + '">📷 Se bilder ↗</a></p></div></details>';
@@ -288,6 +291,7 @@
     if (G.hm && p.hm > G.hm) return false;
     if (G.group && p.g !== G.group) return false;
     if (G.pol && !p.pol) return false;
+    if (G.care && G.care.indexOf(p.sk) < 0) return false;
     if (G.prop && (p.fo || "").split(" ").indexOf(G.prop) < 0) return false;
     if (!skipMonths && G.months.length && coverage(p) === 0) return false;
     return true;
@@ -308,7 +312,7 @@
       '<br>Ljus: ' + (p.sun || "").split("").map(function (c) { return SUN[c][1].toLowerCase(); }).join(", ") +
       '<br>Vatten: ' + (p.wat ? WAT[p.wat][1].toLowerCase() : "") +
       (p.bt && p.bt.length ? '<br>Blomningstid: ' + bloomTime(p.bt) : '') +
-      (p.pol ? '<br>🐝 Bra för pollinerare (bin, humlor och fjärilar)' : '');
+      (p.pol ? '<br>🐝 Bra för pollinerare (bin, humlor och fjärilar)' : '') + careLine(p);
   }
   function gardenCard(p) {
     var cov = G.months.length ? '<div class="cov">Blommar i ' + coverage(p) + ' av ' + G.months.length + ' valda månader</div>' : "";
@@ -400,7 +404,7 @@
       $gmonths.appendChild(b);
     });
     var bind = function (id, key, num) { document.getElementById(id).addEventListener("change", function (e) { G[key] = num ? +e.target.value : e.target.value; renderGarden(); }); };
-    bind("gsun", "sun"); bind("gwat", "wat"); bind("gjt", "jt"); bind("ghm", "hm", true); bind("ggroup", "group"); bind("gprop", "prop");
+    bind("gsun", "sun"); bind("gwat", "wat"); bind("gjt", "jt"); bind("ghm", "hm", true); bind("ggroup", "group"); bind("gprop", "prop"); bind("gcare", "care");
     document.getElementById("gpol").addEventListener("change", function (e) { G.pol = e.target.checked; renderGarden(); });
     $gq.addEventListener("input", function () { G.q = $gq.value; renderGarden(); });
     $gzone.addEventListener("change", function () { setZone(+$gzone.value); renderGarden(); });
@@ -416,8 +420,8 @@
       if (t.classList.contains("mcell")) { G.months = [+t.dataset.m]; renderGarden(); document.getElementById("glist").scrollIntoView({ behavior: "smooth" }); }
     });
     document.getElementById("greset").onclick = function () {
-      G = { q: "", sun: "", wat: "", jt: "", hm: 0, group: "", prop: "", pol: false, months: [] };
-      ["gsun", "gwat", "gjt", "ghm", "ggroup", "gprop"].forEach(function (id) { document.getElementById(id).selectedIndex = 0; });
+      G = { q: "", sun: "", wat: "", jt: "", hm: 0, group: "", prop: "", care: "", pol: false, months: [] };
+      ["gsun", "gwat", "gjt", "ghm", "ggroup", "gprop", "gcare"].forEach(function (id) { document.getElementById(id).selectedIndex = 0; });
       document.getElementById("gpol").checked = false; $gq.value = "";
       renderGarden();
     };
