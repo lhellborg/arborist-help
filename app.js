@@ -11,6 +11,23 @@
     both: ["Blommar på både fjolårsved och årsskott", "Första blomningen sitter på fjolårsved och senare blommor på nya skott, så beskär lätt."]
   };
   var TECH = { cut: "Snitt ovanför knopp", thin: "Tunna ut vid basen", ground: "Ner till marken", hedge: "Häckklippning", remove: "Ta bort död/korsande ved" };
+  var SUN = { s: ["☀️", "Sol"], h: ["⛅", "Halvskugga"], k: ["☁️", "Skugga"] };
+  var WAT = { d: ["🌵", "Torktålig"], m: ["💧", "Normalt vattenbehov"], w: ["💦", "Vattenkrävande"] };
+  function bloomTime(ms) {
+    if (!ms || !ms.length) return "";
+    var contiguous = ms.every(function (m, i) { return i === 0 || m === ms[i - 1] + 1; });
+    var names = ms.map(function (m) { return MONTHS[m - 1]; });
+    if (ms.length === 1) return names[0];
+    return contiguous ? names[0] + "–" + names[names.length - 1] : names.join(", ");
+  }
+  function icons(p) {
+    var h = "";
+    (p.sun || "").split("").forEach(function (c) { h += '<span class="ic" title="' + SUN[c][1] + '" aria-label="' + SUN[c][1] + '">' + SUN[c][0] + '</span>'; });
+    if (p.wat) h += '<span class="ic" title="' + WAT[p.wat][1] + '" aria-label="' + WAT[p.wat][1] + '">' + WAT[p.wat][0] + '</span>';
+    var bt = bloomTime(p.bt);
+    if (bt) h += '<span class="ic bt" title="Blomningstid" aria-label="Blomningstid ' + bt + '">🌸 ' + bt + '</span>';
+    return h ? '<div class="icons">' + h + '</div>' : "";
+  }
   var now = new Date().getMonth() + 1;
 
   var $q = document.getElementById("q"), $months = document.getElementById("months"),
@@ -70,9 +87,9 @@
       return '<details class="card"' + (res.length === 1 ? " open" : "") + '><summary>' +
         '<div class="name">' + p.n + '</div><div class="latin">' + p.l + '</div>' +
         '<div class="tag">' + p.g + ' · zon ' + p.z.split(" ")[0] + ' · ' + p.ht.split(" (")[0] + '</div>' +
-        (p.b ? '<div class="bloom ' + p.b + '">🌸 ' + BLOOM[p.b][0] + '</div>' : '') +
+        icons(p) + (p.b ? '<div class="bloom ' + p.b + '">🌿 ' + BLOOM[p.b][0] + '</div>' : '') +
         '<div class="strip">' + strip + '</div><div class="strip-l">' + lab + '</div></summary>' +
-        '<div class="body"><h3>Fakta</h3><p>Zon ' + p.z + '<br>Höjd: ' + p.ht + '<br>Jord och läge: ' + p.jm + '</p>' + (p.b ? '<h3>Blomning</h3><p>' + BLOOM[p.b][0] + '. ' + BLOOM[p.b][1] + '</p>' : '') + '<h3>När</h3><p>' + p.w + '</p><h3>Hur</h3><p>' + p.h + '</p>' +
+        '<div class="body"><h3>Fakta</h3><p>Zon ' + p.z + '<br>Höjd: ' + p.ht + '<br>Jord och läge: ' + p.jm + '<br>Ljus: ' + (p.sun || "").split("").map(function (c) { return SUN[c][1].toLowerCase(); }).join(", ") + '<br>Vatten: ' + (p.wat ? WAT[p.wat][1].toLowerCase() : "") + (p.bt && p.bt.length ? '<br>Blomningstid: ' + bloomTime(p.bt) : '') + '</p>' + (p.b ? '<h3>Blomning</h3><p>' + BLOOM[p.b][0] + '. ' + BLOOM[p.b][1] + '</p>' : '') + '<h3>När</h3><p>' + p.w + '</p><h3>Hur</h3><p>' + p.h + '</p>' +
         (p.t ? '<h3>Metoder (se guiden överst)</h3><p>' + p.t.split(" ").map(function (t) { return TECH[t]; }).join(", ") + '</p>' : '') +
         '<p class="links"><a target="_blank" rel="noopener" href="https://www.google.com/search?tbm=isch&q=' + encodeURIComponent(p.n + " " + p.l) + '">📷 Se bilder ↗</a></p></div></details>';
     }).join("");
