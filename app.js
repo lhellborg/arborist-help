@@ -9,7 +9,7 @@
   try { MINE = JSON.parse(localStorage.getItem("mine") || "[]").filter(function (i) { return plants[i]; }); } catch (e) { MINE = []; }
   function saveMine() { try { localStorage.setItem("mine", JSON.stringify(MINE)); } catch (e) {} }
   var tab = "prune";
-  var G = { q: "", sun: "", wat: "", jt: "", hm: 0, group: "", pol: false, months: [] };
+  var G = { q: "", sun: "", wat: "", jt: "", hm: 0, group: "", prop: "", pol: false, months: [] };
   function maxZone(p) { var m = /(\d)\s*[–-]\s*(\d)/.exec(p.z || ""); return m ? +m[2] : 8; }
   var BLOOM = {
     year: ["Blommar på årsskott", "Nya skott bär blommorna, så du kan beskära hårt på vintern eller tidig vår."],
@@ -25,6 +25,11 @@
     var names = ms.map(function (m) { return MONTHS[m - 1]; });
     if (ms.length === 1) return names[0];
     return contiguous ? names[0] + "–" + names[names.length - 1] : names.join(", ");
+  }
+  var PROP = { s: ["🌰", "Frö"], k: ["✂️", "Sticklingar"], d: ["🔀", "Delning"], a: ["↩️", "Avläggare"], r: ["🌱", "Rotskott/utlöpare"], y: ["🍎", "Ympning"] };
+  function propHtml(p) {
+    if (!p.fo) return "";
+    return '<h3>Förökning</h3><div class="icons">' + p.fo.split(" ").map(function (c) { return '<span class="ic">' + PROP[c][0] + ' ' + PROP[c][1] + '</span>'; }).join("") + '</div><p>' + p.ft + '</p>';
   }
   function icons(p) {
     var h = "";
@@ -99,6 +104,7 @@
         '<div class="strip">' + strip + '</div><div class="strip-l">' + lab + '</div></summary>' +
         '<div class="body"><details class="facts"><summary>Fakta</summary><p>Zon ' + p.z + '<br>Höjd: ' + p.ht + '<br>Jord och läge: ' + p.jm + '<br>Ljus: ' + (p.sun || "").split("").map(function (c) { return SUN[c][1].toLowerCase(); }).join(", ") + '<br>Vatten: ' + (p.wat ? WAT[p.wat][1].toLowerCase() : "") + (p.bt && p.bt.length ? '<br>Blomningstid: ' + bloomTime(p.bt) : '') + (p.pol ? '<br>🐝 Bra för pollinerare (bin, humlor och fjärilar)' : '') + '</p></details>' + (p.b ? '<h3>Blomning</h3><p>' + BLOOM[p.b][0] + '. ' + BLOOM[p.b][1] + '</p>' : '') + '<h3>När</h3><p>' + p.w + '</p><h3>Hur</h3><p>' + p.h + '</p>' +
         (p.t ? '<h3>Metoder (se guiden överst)</h3><p>' + p.t.split(" ").map(function (t) { return TECH[t]; }).join(", ") + '</p>' : '') +
+        propHtml(p) +
         '<p class="links"><a target="_blank" rel="noopener" href="https://www.google.com/search?tbm=isch&q=' + encodeURIComponent(p.n + " " + p.l) + '">📷 Se bilder ↗</a></p></div></details>';
     }).join("");
   }
@@ -266,6 +272,7 @@
     if (G.hm && p.hm > G.hm) return false;
     if (G.group && p.g !== G.group) return false;
     if (G.pol && !p.pol) return false;
+    if (G.prop && (p.fo || "").split(" ").indexOf(G.prop) < 0) return false;
     if (!skipMonths && G.months.length && coverage(p) === 0) return false;
     return true;
   }
@@ -295,6 +302,7 @@
       icons(p) + cov + (p.bt && p.bt.length ? bloomStrip(p) : '') + '</summary>' +
       '<div class="body"><h3>Fakta</h3><p>' + factsText(p) + '</p>' +
       '<h3>Beskärning</h3><p>' + p.w + ' <span class="tag">(se fliken Beskärning)</span></p>' +
+      propHtml(p) +
       '<p class="links"><a target="_blank" rel="noopener" href="https://www.google.com/search?tbm=isch&q=' + encodeURIComponent(p.n + " " + p.l) + '">📷 Se bilder ↗</a></p>' +
       addBtn(p) + '</div></details>';
   }
@@ -376,7 +384,7 @@
       $gmonths.appendChild(b);
     });
     var bind = function (id, key, num) { document.getElementById(id).addEventListener("change", function (e) { G[key] = num ? +e.target.value : e.target.value; renderGarden(); }); };
-    bind("gsun", "sun"); bind("gwat", "wat"); bind("gjt", "jt"); bind("ghm", "hm", true); bind("ggroup", "group");
+    bind("gsun", "sun"); bind("gwat", "wat"); bind("gjt", "jt"); bind("ghm", "hm", true); bind("ggroup", "group"); bind("gprop", "prop");
     document.getElementById("gpol").addEventListener("change", function (e) { G.pol = e.target.checked; renderGarden(); });
     $gq.addEventListener("input", function () { G.q = $gq.value; renderGarden(); });
     $gzone.addEventListener("change", function () { setZone(+$gzone.value); renderGarden(); });
@@ -388,8 +396,8 @@
       if (t.classList.contains("mcell")) { G.months = [+t.dataset.m]; renderGarden(); document.getElementById("glist").scrollIntoView({ behavior: "smooth" }); }
     });
     document.getElementById("greset").onclick = function () {
-      G = { q: "", sun: "", wat: "", jt: "", hm: 0, group: "", pol: false, months: [] };
-      ["gsun", "gwat", "gjt", "ghm", "ggroup"].forEach(function (id) { document.getElementById(id).selectedIndex = 0; });
+      G = { q: "", sun: "", wat: "", jt: "", hm: 0, group: "", prop: "", pol: false, months: [] };
+      ["gsun", "gwat", "gjt", "ghm", "ggroup", "gprop"].forEach(function (id) { document.getElementById(id).selectedIndex = 0; });
       document.getElementById("gpol").checked = false; $gq.value = "";
       renderGarden();
     };
