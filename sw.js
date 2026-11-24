@@ -1,5 +1,5 @@
-const C = "beskarning-v14";
-const FILES = ["./", "index.html", "style.css?v=14", "app.js?v=14", "plants.js?v=14", "clematis.js?v=14", "icon.svg", "manifest.webmanifest"];
+const C = "beskarning-v15";
+const FILES = ["./", "index.html", "style.css?v=15", "app.js?v=15", "plants.js?v=15", "clematis.js?v=15", "guide.js?v=15", "icon.svg", "manifest.webmanifest"];
 const fresh = r => new Request(r, { cache: "reload" });
 self.addEventListener("install", e => e.waitUntil(caches.open(C).then(c => c.addAll(FILES.map(fresh))).then(() => self.skipWaiting())));
 self.addEventListener("activate", e => e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== C).map(k => caches.delete(k)))).then(() => self.clients.claim())));

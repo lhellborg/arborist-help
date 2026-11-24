@@ -239,6 +239,22 @@
     $cres.innerHTML = '<div class="cres"><div class="ctitle">Hittar inte "' + txt.replace(/</g, "&lt;") + '"</div><p>Sorten finns inte i listan. Sök på <a target="_blank" rel="noopener" href="https://www.google.com/search?q=' + encodeURIComponent("Clematis " + txt + " pruning group") + '">sortens beskärningsgrupp ↗</a> eller svara på frågan om blomningstid nedan.</p></div>';
   }
 
+
+  // ---------- Förökningsguide ----------
+  function renderPGuide() {
+    var el = document.getElementById("pguide");
+    if (!el || !window.PGUIDE) return;
+    el.innerHTML = '<details id="pg" class="card guide"><summary><div class="name">🌱 Förökningsguide: steg för steg</div>' +
+      '<div class="tag">Stratifiering, sticklingar, delning, avläggare och rotskott</div></summary><div class="figs">' +
+      window.PGUIDE.map(function (g) {
+        return '<details class="pgsec"><summary>' + g.emoji + ' ' + g.title + '</summary><p>' + g.intro + '</p><ol class="pgsteps">' +
+          g.steps.map(function (s, i) {
+            return '<li class="gstep"><div class="gfig">' + window.PSCENES[s.scene]() + '</div><div class="gtxt"><b>' + (i + 1) + '.</b> ' + s.text + '</div></li>';
+          }).join("") + '</ol><p class="tag">' + g.tip + '</p>' +
+          '<button type="button" class="chip" data-showprop="' + g.code + '">Visa växter som förökas så ↓</button></details>';
+      }).join("") + '</div></details>';
+  }
+
   // ---------- Flikar ----------
   function showTab(t) {
     tab = t === "garden" ? "garden" : "prune";
@@ -392,6 +408,10 @@
       var t = e.target.closest("button"); if (!t) return;
       if (t.dataset.i !== undefined) { toggleMine(+t.dataset.i); return; }
       if (t.dataset.rm !== undefined) { toggleMine(+t.dataset.rm); return; }
+      if (t.dataset.showprop) {
+        G.prop = t.dataset.showprop; document.getElementById("gprop").value = G.prop; renderGarden();
+        document.getElementById("glist").scrollIntoView({ behavior: "smooth" }); return;
+      }
       if (t.id === "mclear") { if (confirm("Tömma Min trädgård?")) { MINE.slice().forEach(toggleMine); } return; }
       if (t.classList.contains("mcell")) { G.months = [+t.dataset.m]; renderGarden(); document.getElementById("glist").scrollIntoView({ behavior: "smooth" }); }
     });
@@ -410,6 +430,7 @@
   attachSuggest($q, function (q) { return monthItems(q).concat(clemItems(q, true), plantItems(q)); });
   attachSuggest($gq, plantItems);
   initClem();
+  renderPGuide();
   showTab(location.hash === "#tradgard" ? "garden" : "prune");
   if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(function () {});
 })();

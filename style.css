@@ -90,3 +90,11 @@ input[type=checkbox]{width:auto}
 .cgroup summary{cursor:pointer;padding:6px 0;font-weight:600}
 .cgroup p{margin:4px 0 8px}
 .cres a{color:var(--accent)}
+
+#pg{margin:12px 0 0}
+.pgsec{border-top:1px solid var(--line);padding:8px 0}
+.pgsec>summary{cursor:pointer;font-weight:650;padding:4px 0}
+.pgsteps{list-style:none;margin:6px 0;padding:0}
+.gstep{display:grid;grid-template-columns:44% 1fr;gap:10px;align-items:center;margin:10px 0}
+.gfig svg{width:100%;height:auto;display:block;background:var(--bg);border:1px solid var(--line);border-radius:10px}
+.gtxt{font-size:.92rem}

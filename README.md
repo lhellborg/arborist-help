@@ -47,6 +47,8 @@ Välj vilka förhållanden du har, så får du växter som passar. Filter:
 - **Förökning:** visa bara växter som kan förökas på ett visst sätt, till exempel med sticklingar eller delning.
 - **🐝 Bra för pollinerare** och **Blommar i:** välj en eller flera månader. Med "☀️ Hela sommaren" får du växter som blommar i juni–augusti. Växter som blommar i flest av de valda månaderna visas först.
 
+**🌱 Förökningsguide:** i fliken finns en guide med enkla bilder, steg för steg, för sex metoder: frö (kall stratifiering), vedstickling, grön stickling, delning av perenner, avläggare samt rotskott och utlöpare. Under varje metod finns en knapp som visar växter som kan förökas på det sättet.
+
 **Min trädgård:** i varje växtkort finns knappen "Lägg till i min trädgård". Överst visas då en **blomningskalender** med hur många av dina växter som blommar varje månad. Månader utan blommor (april–oktober) markeras som luckor, med förslag på växter som fyller dem. Tryck på en månad för att filtrera fram växter som blommar då. Listan sparas i telefonen.
 
 Appen har 130 växter: träd, buskar, klätterväxter, häckar, 39 perenner och 17 kryddväxter.
