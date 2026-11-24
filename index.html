@@ -8,19 +8,26 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icon.svg">
-<link rel="stylesheet" href="style.css?v=7">
+<link rel="stylesheet" href="style.css?v=8">
 </head>
 <body>
 <header>
   <h1>🌿 Beskärningshjälpen</h1>
-  <input id="q" type="search" placeholder="Sök växt eller månad, t.ex. rosor eller april" autocomplete="off" aria-label="Sök">
-  <div id="months" class="chips" role="group" aria-label="Månad"></div>
-  <div class="row">
-    <select id="group" aria-label="Växtgrupp"></select>
-    <select id="zone" aria-label="Odlingszon"><option value="0">Alla zoner</option><option value="1">Min zon: 1</option><option value="2">Min zon: 2</option><option value="3">Min zon: 3</option><option value="4">Min zon: 4</option><option value="5">Min zon: 5</option><option value="6">Min zon: 6</option><option value="7">Min zon: 7</option><option value="8">Min zon: 8</option></select>
-    <span id="count"></span>
+  <nav class="tabs" role="tablist">
+    <button id="tabPrune" class="tab on" role="tab" type="button">✂️ Beskärning</button>
+    <button id="tabGarden" class="tab" role="tab" type="button">🌱 Trädgårdshjälpen</button>
+  </nav>
+  <div id="pruneCtl">
+    <input id="q" type="search" placeholder="Sök växt eller månad, t.ex. rosor eller april" autocomplete="off" aria-label="Sök">
+    <div id="months" class="chips" role="group" aria-label="Månad"></div>
+    <div class="row">
+      <select id="group" aria-label="Växtgrupp"></select>
+      <select id="zone" aria-label="Odlingszon"><option value="0">Alla zoner</option><option value="1">Min zon: 1</option><option value="2">Min zon: 2</option><option value="3">Min zon: 3</option><option value="4">Min zon: 4</option><option value="5">Min zon: 5</option><option value="6">Min zon: 6</option><option value="7">Min zon: 7</option><option value="8">Min zon: 8</option></select>
+      <span id="count"></span>
+    </div>
   </div>
 </header>
+<section id="pruneView">
 <details id="guide" class="card guide"><summary><div class="name">✂️ Så beskär du: enkla bilder</div><div class="tag">Fem grundmetoder som används i listan</div></summary>
 <p class="legend">☀️ Sol · ⛅ Halvskugga · ☁️ Skugga · 🌵 Torktålig · 💧 Normalt vattenbehov · 💦 Vattenkrävande · 🌸 Blomningstid · 🐝 Bra för pollinerare</p>
 <div class="figs">
@@ -69,8 +76,28 @@
 <figcaption><b>Ta bort död och korsande ved.</b> Ta bort döda, sjuka, inåtväxande, korsande och skavande grenar samt vattenskott. Skär vid grenkragen.</figcaption></figure>
 </div></details>
 <main id="list"></main>
+</section>
+<section id="gardenView" hidden>
+<div class="gctl card">
+  <div class="gtitle">Hitta växter till din trädgård</div>
+  <input id="gq" type="search" placeholder="Sök växt, t.ex. lavendel" autocomplete="off" aria-label="Sök växt">
+  <div class="grid2">
+    <label>Ljus<select id="gsun"><option value="">Alla</option><option value="s">☀️ Sol</option><option value="h">⛅ Halvskugga</option><option value="k">☁️ Skugga</option></select></label>
+    <label>Jordfuktighet<select id="gwat"><option value="">Alla</option><option value="d">🌵 Torr</option><option value="m">💧 Normal</option><option value="w">💦 Fuktig</option></select></label>
+    <label>Zon<select id="gzone"><option value="0">Alla zoner</option><option value="1">Zon 1</option><option value="2">Zon 2</option><option value="3">Zon 3</option><option value="4">Zon 4</option><option value="5">Zon 5</option><option value="6">Zon 6</option><option value="7">Zon 7</option><option value="8">Zon 8</option></select></label>
+    <label>Jordtyp<select id="gjt"><option value="">Alla</option><option value="sand">Sandig, väldränerad</option><option value="ler">Lerig</option><option value="mull">Mullrik</option><option value="sur">Sur</option><option value="kalk">Kalkrik</option></select></label>
+    <label>Max höjd<select id="ghm"><option value="0">Alla höjder</option><option value="0.5">Upp till 0,5 m</option><option value="1">Upp till 1 m</option><option value="2">Upp till 2 m</option><option value="4">Upp till 4 m</option><option value="8">Upp till 8 m</option></select></label>
+    <label>Grupp<select id="ggroup"></select></label>
+  </div>
+  <label class="chk"><input type="checkbox" id="gpol"> 🐝 Bara växter som är bra för pollinerare</label>
+  <div class="lbl">Blommar i (välj en eller flera månader)</div>
+  <div id="gmonths" class="chips wrap" role="group" aria-label="Blomningsmånader"></div>
+  <div class="grow"><button id="greset" class="chip" type="button">Rensa filter</button><span id="gcount"></span></div>
+</div>
+<main id="glist"></main>
+</section>
 <footer>Egna sammanfattningar som riktlinjer. Anpassa efter din zon, växtens ålder och väder.</footer>
-<script src="plants.js?v=7"></script>
-<script src="app.js?v=7"></script>
+<script src="plants.js?v=8"></script>
+<script src="app.js?v=8"></script>
 </body>
 </html>
