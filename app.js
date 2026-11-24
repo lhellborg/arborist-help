@@ -8,6 +8,7 @@
     old: ["Blommar på fjolårsved", "Blomknopparna bildas året innan. Beskär direkt efter blomning, annars tar du bort årets blommor."],
     both: ["Blommar på både fjolårsved och årsskott", "Första blomningen sitter på fjolårsved och senare blommor på nya skott, så beskär lätt."]
   };
+  var TECH = { cut: "Snitt ovanför knopp", thin: "Tunna ut vid basen", ground: "Ner till marken", hedge: "Häckklippning", remove: "Ta bort död/korsande ved" };
   var now = new Date().getMonth() + 1;
 
   var $q = document.getElementById("q"), $months = document.getElementById("months"),

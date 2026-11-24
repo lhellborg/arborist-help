@@ -32,3 +32,8 @@ footer{text-align:center;color:var(--muted);font-size:.8rem;padding:0 16px 24px}
 .bloom{display:inline-block;margin-top:6px;font-size:.8rem;padding:2px 8px;border-radius:999px;border:1px solid var(--line)}
 .bloom.year{background:#e6f3e4;color:#1f5a2a}.bloom.old{background:#fdf0dc;color:#7a4a05}.bloom.both{background:#e8eef9;color:#2b4a82}
 @media(prefers-color-scheme:dark){.bloom.year{background:#22382a;color:#a9e0b2}.bloom.old{background:#42331a;color:#f0cf95}.bloom.both{background:#222f47;color:#b5c9ef}}
+#guide{max-width:688px;width:calc(100% - 32px);margin:12px auto 0}
+.figs{display:grid;gap:14px;margin-top:10px;border-top:1px solid var(--line);padding-top:10px}
+figure{margin:0}figure svg{width:100%;height:auto;background:var(--bg);border:1px solid var(--line);border-radius:10px}
+figcaption{font-size:.9rem;color:var(--muted);margin-top:4px}
+.links{margin-top:10px!important}.links a{color:var(--accent)}
