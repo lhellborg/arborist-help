@@ -22,7 +22,7 @@ Webbapp som visar när och hur du beskär trädgårdsväxter.
 - **Metoder:** vilka av grundmetoderna som gäller.
 - **📷 Se bilder:** en bildsökning på växten.
 
-**Ikoner på korten:** ☀️ sol, ⛅ halvskugga, ☁️ skugga, 🌵 torktålig, 💧 normalt vattenbehov, 💦 vattenkrävande och 🌸 blomningstid. Teckenförklaringen finns också i guiden.
+**Ikoner på korten:** ☀️ sol, ⛅ halvskugga, ☁️ skugga, 🌵 torktålig, 💧 normalt vattenbehov, 💦 vattenkrävande 🌸 blomningstid och 🐝 bra för pollinerare. Teckenförklaringen finns också i guiden.
 
 Månadsremsan på varje kort visar bästa månader (januari–december).
 
@@ -41,7 +41,7 @@ Texterna är egna sammanfattningar och riktlinjer, inte text ur någon bok. Zon,
 
 ## Lägg till eller ändra växter
 
-All växtdata ligger i `plants.js`. Varje växt har bland annat `m` (bästa månader, 1–12), `b` (blommar på årsskott eller fjolårsved) och `t` (beskärningsmetoder), `z` (zon), `ht` (höjd) och `jm` (jordmån), `sun` (ljus), `wat` (vatten) och `bt` (blomningstid).
+All växtdata ligger i `plants.js`. Varje växt har bland annat `m` (bästa månader, 1–12), `b` (blommar på årsskott eller fjolårsved) och `t` (beskärningsmetoder), `z` (zon), `ht` (höjd) och `jm` (jordmån), `sun` (ljus), `wat` (vatten) `bt` (blomningstid) och `pol` (bra för pollinerare).
 
 ## Kör lokalt
 
