@@ -109,35 +109,46 @@
 
 
   // ---------- Förslag när man skriver ----------
-  function attachSuggest(input, withMonths) {
+  var CLEM = window.CLEM || [], CG = window.CLEM_GROUPS || {};
+  function wordStart(s, q) { return s.split(/[\s(–/×,-]+/).some(function (w) { return w.indexOf(q) === 0; }); }
+  function plantItems(q) {
+    function score(p) {
+      var n = norm(p.n), l = norm(p.l);
+      if (n.indexOf(q) === 0) return 0;
+      if (wordStart(n, q)) return 1;
+      if (n.indexOf(q) >= 0) return 2;
+      if (wordStart(l, q)) return 3;
+      return -1;
+    }
+    return plants.map(function (p) { return { p: p, s: score(p) }; })
+      .filter(function (x) { return x.s >= 0; })
+      .sort(function (a, b) { return a.s - b.s || a.p.n.localeCompare(b.p.n, "sv"); })
+      .slice(0, 6)
+      .map(function (x) { return { label: x.p.n, sub: x.p.l + " · " + x.p.g, value: x.p.n }; });
+  }
+  function clemItems(q, forPrune) {
+    return CLEM.filter(function (c) { var s = norm(c.n + " " + (c.al || "")); return s.indexOf(q) === 0 || wordStart(s, q); })
+      .slice(0, 5)
+      .map(function (c) {
+        return { label: c.n, sub: "Klematis · grupp " + c.g + " (" + CG[c.g].name + ")", value: forPrune ? "klematis, grupp " + c.g : c.n, c: c };
+      });
+  }
+  function monthItems(q) {
+    var r = [];
+    if (q.length >= 2) MONTHS.forEach(function (m) { if (m.indexOf(q) === 0) r.push({ label: cap(m), sub: "Visa växter att beskära i " + m, value: m }); });
+    return r;
+  }
+  function attachSuggest(input, getItems, onPick) {
     var box = document.createElement("ul");
     box.className = "sugbox"; box.hidden = true; box.setAttribute("role", "listbox");
     input.parentNode.appendChild(box);
     input.setAttribute("autocomplete", "off");
     var items = [], idx = -1, skip = false;
     function hide() { box.hidden = true; idx = -1; }
-    function score(p, q) {
-      var n = norm(p.n), l = norm(p.l);
-      if (n.indexOf(q) === 0) return 0;
-      if (n.split(/[\s(–-]+/).some(function (w) { return w.indexOf(q) === 0; })) return 1;
-      if (n.indexOf(q) >= 0) return 2;
-      if (l.split(/[\s×/]+/).some(function (w) { return w.indexOf(q) === 0; })) return 3;
-      return -1;
-    }
     function build() {
       if (skip) { skip = false; return; }
       var q = norm(input.value);
-      items = [];
-      if (q.length >= 1) {
-        if (withMonths && q.length >= 2) MONTHS.forEach(function (m, i) {
-          if (m.indexOf(q) === 0) items.push({ label: cap(m), sub: "Visa växter att beskära i " + m, value: m });
-        });
-        plants.map(function (p) { return { p: p, s: score(p, q) }; })
-          .filter(function (x) { return x.s >= 0; })
-          .sort(function (a, b) { return a.s - b.s || a.p.n.localeCompare(b.p.n, "sv"); })
-          .slice(0, 6)
-          .forEach(function (x) { items.push({ label: x.p.n, sub: x.p.l + " · " + x.p.g, value: x.p.n }); });
-      }
+      items = q.length >= 1 ? getItems(q) : [];
       idx = -1;
       if (!items.length) { hide(); return; }
       box.innerHTML = items.map(function (it, k) {
@@ -146,11 +157,12 @@
       box.hidden = false;
     }
     function pick(k) {
-      if (!items[k]) return;
+      var it = items[k];
+      if (!it) return;
       skip = true;
-      input.value = items[k].value;
+      input.value = it.value;
       hide();
-      input.dispatchEvent(new Event("input"));
+      if (onPick) onPick(it); else input.dispatchEvent(new Event("input"));
       skip = false;
       input.blur();
     }
@@ -171,6 +183,54 @@
       var li = e.target.closest("li");
       if (li) { e.preventDefault(); pick(+li.dataset.k); }
     });
+  }
+
+  // ---------- Klematishjälp ----------
+  var $cres = document.getElementById("cres"), $cq = document.getElementById("cq");
+  function showGroup(g, title) {
+    var G = CG[g];
+    $cres.innerHTML = '<div class="cres g' + g + '"><div class="ctitle">' + title + '</div>' +
+      '<div><b>Beskärningsgrupp ' + g + ' (' + G.name + ')</b></div>' +
+      '<p>' + G.when + '</p><p><b>Så beskär du:</b> ' + G.how + '</p>' +
+      '<button type="button" class="chip" data-showgroup="' + g + '">Visa i listan ↓</button></div>';
+  }
+  function showClem(c) {
+    showGroup(c.g, "'" + c.n.replace(" (art)", "") + "' · " + c.t + ", " + c.c);
+  }
+  function renderClemList() {
+    var h = "";
+    [1, 2, 3].forEach(function (g) {
+      h += '<details class="cgroup"><summary>Grupp ' + g + ' (' + CG[g].name + ') · ' + CLEM.filter(function (c) { return c.g === g; }).length + ' sorter</summary><p>' +
+        CLEM.filter(function (c) { return c.g === g; }).map(function (c) { return '<button type="button" class="mrm" data-cl="' + CLEM.indexOf(c) + '">' + c.n + '</button>'; }).join(" ") + '</p></details>';
+    });
+    document.getElementById("clist").innerHTML = h;
+  }
+  function initClem() {
+    renderClemList();
+    attachSuggest($cq, function (q) { return clemItems(q, false); }, function (it) { showClem(it.c); });
+    $cq.addEventListener("keydown", function (e) {
+      if (e.key !== "Enter") return;
+      var q = norm($cq.value); if (!q) return;
+      var m = clemItems(q, false);
+      if (m.length) showClem(m[0].c);
+      else notFound($cq.value);
+    });
+    document.getElementById("clem").addEventListener("click", function (e) {
+      var b = e.target.closest("button"); if (!b) return;
+      if (b.dataset.g !== undefined) {
+        var g = +b.dataset.g;
+        if (g) showGroup(g, "Din klematis hör troligen till:");
+        else $cres.innerHTML = '<div class="cres"><div class="ctitle">Ingen fara</div><p>Klipp inte ner hårt. Ta bara bort död ved (grå och torr, utan knoppar) och notera när den blommar i år. Blommar den tidigt på våren är den grupp 1, i försommaren grupp 2 och från juli grupp 3.</p></div>';
+      } else if (b.dataset.cl !== undefined) {
+        $cq.value = CLEM[+b.dataset.cl].n; showClem(CLEM[+b.dataset.cl]);
+      } else if (b.dataset.showgroup) {
+        $q.value = "klematis, grupp " + b.dataset.showgroup; state.q = $q.value; state.month = 0; render();
+        document.getElementById("list").scrollIntoView({ behavior: "smooth" });
+      }
+    });
+  }
+  function notFound(txt) {
+    $cres.innerHTML = '<div class="cres"><div class="ctitle">Hittar inte "' + txt.replace(/</g, "&lt;") + '"</div><p>Sorten finns inte i listan. Sök på <a target="_blank" rel="noopener" href="https://www.google.com/search?q=' + encodeURIComponent("Clematis " + txt + " pruning group") + '">sortens beskärningsgrupp ↗</a> eller svara på frågan om blomningstid nedan.</p></div>';
   }
 
   // ---------- Flikar ----------
@@ -339,8 +399,9 @@
   setZone(state.zone);
   buildControls();
   buildGarden();
-  attachSuggest($q, true);
-  attachSuggest($gq, false);
+  attachSuggest($q, function (q) { return monthItems(q).concat(clemItems(q, true), plantItems(q)); });
+  attachSuggest($gq, plantItems);
+  initClem();
   showTab(location.hash === "#tradgard" ? "garden" : "prune");
   if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(function () {});
 })();

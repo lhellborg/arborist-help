@@ -32,7 +32,7 @@ footer{text-align:center;color:var(--muted);font-size:.8rem;padding:0 16px 24px}
 .bloom{display:inline-block;margin-top:6px;font-size:.8rem;padding:2px 8px;border-radius:999px;border:1px solid var(--line)}
 .bloom.year{background:#e6f3e4;color:#1f5a2a}.bloom.old{background:#fdf0dc;color:#7a4a05}.bloom.both{background:#e8eef9;color:#2b4a82}
 @media(prefers-color-scheme:dark){.bloom.year{background:#22382a;color:#a9e0b2}.bloom.old{background:#42331a;color:#f0cf95}.bloom.both{background:#222f47;color:#b5c9ef}}
-#guide{max-width:688px;width:calc(100% - 32px);margin:12px auto 0}
+#guide,#clem{max-width:688px;width:calc(100% - 32px);margin:12px auto 0}
 .figs{display:grid;gap:14px;margin-top:10px;border-top:1px solid var(--line);padding-top:10px}
 figure{margin:0}figure svg{width:100%;height:auto;background:var(--bg);border:1px solid var(--line);border-radius:10px}
 figcaption{font-size:.9rem;color:var(--muted);margin-top:4px}
@@ -81,3 +81,12 @@ input[type=checkbox]{width:auto}
 .sugbox li{padding:8px 10px;border-radius:8px;cursor:pointer;display:flex;flex-direction:column}
 .sugbox li.on,.sugbox li:hover{background:var(--bg)}
 .sl{font-weight:600}.ss{font-size:.8rem;color:var(--muted)}
+
+.qbtns{display:grid;gap:6px}
+.qbtn{font:inherit;text-align:left;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--fg);cursor:pointer}
+.cres{border:1px solid var(--line);border-left:4px solid var(--muted);border-radius:10px;padding:10px 12px;background:var(--bg)}
+.cres.g1{border-left-color:#4c9be8}.cres.g2{border-left-color:#e8a34c}.cres.g3{border-left-color:#d6336c}
+.cres p{margin:6px 0}.ctitle{font-weight:650;margin-bottom:2px}
+.cgroup summary{cursor:pointer;padding:6px 0;font-weight:600}
+.cgroup p{margin:4px 0 8px}
+.cres a{color:var(--accent)}

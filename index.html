@@ -8,7 +8,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icon.svg">
-<link rel="stylesheet" href="style.css?v=10">
+<link rel="stylesheet" href="style.css?v=11">
 </head>
 <body>
 <header>
@@ -75,6 +75,20 @@
 <text x="192" y="100" text-anchor="middle" font-size="9" fill="currentColor">korsar/inåt</text></svg>
 <figcaption><b>Ta bort död och korsande ved.</b> Ta bort döda, sjuka, inåtväxande, korsande och skavande grenar samt vattenskott. Skär vid grenkragen.</figcaption></figure>
 </div></details>
+<details id="clem" class="card guide"><summary><div class="name">🌿 Klematis: vilken grupp?</div><div class="tag">Sök sort, eller svara på en fråga om blomningen</div></summary>
+<div class="figs">
+  <div class="sw"><input id="cq" type="search" placeholder="Sök sort, t.ex. Summer Snow eller Nelly Moser" autocomplete="off" aria-label="Sök klematissort"></div>
+  <div id="cres" aria-live="polite"></div>
+  <div class="lbl">Vet du inte sorten? När blommar din klematis?</div>
+  <div class="qbtns">
+    <button type="button" class="qbtn" data-g="1">🌼 Tidigt på våren (april–maj), små klockor eller stjärnor</button>
+    <button type="button" class="qbtn" data-g="2">🌸 Försommar (maj–juni), stora blommor. Ibland en andra blomning i augusti</button>
+    <button type="button" class="qbtn" data-g="3">🌺 Sommar till höst (juli–oktober), blommorna sitter på nya skott</button>
+    <button type="button" class="qbtn" data-g="0">🤷 Jag vet inte</button>
+  </div>
+  <div class="lbl">Alla sorter i listan</div>
+  <div id="clist"></div>
+</div></details>
 <main id="list"></main>
 </section>
 <section id="gardenView" hidden>
@@ -98,7 +112,8 @@
 <main id="glist"></main>
 </section>
 <footer>Egna sammanfattningar som riktlinjer. Anpassa efter din zon, växtens ålder och väder.</footer>
-<script src="plants.js?v=10"></script>
-<script src="app.js?v=10"></script>
+<script src="plants.js?v=11"></script>
+<script src="clematis.js?v=11"></script>
+<script src="app.js?v=11"></script>
 </body>
 </html>

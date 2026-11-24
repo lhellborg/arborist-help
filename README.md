@@ -32,6 +32,8 @@ Månadsremsan på varje kort visar bästa månader (januari–december).
 
 **Guiden:** överst finns "✂️ Så beskär du" med enkla bilder av fem grundmetoder: snitt ovanför knopp, tunna ut vid basen, ner till marken, häckklippning samt borttagning av död och korsande ved.
 
+**🌿 Klematis: vilken grupp?** Under guiden finns ett kort för klematis. Sök din sort, till exempel "Summer Snow" eller "Nelly Moser", så får du beskärningsgrupp (1, 2 eller 3) och hur du beskär. Vet du inte sorten väljer du när den blommar. Där finns också en lista med 53 vanliga sorter och arter. Sorterna dyker också upp som förslag i sökrutan överst. Hittar du inte sorten länkas en sökning efter dess beskärningsgrupp.
+
 ### Fliken Trädgårdshjälpen
 
 Välj vilka förhållanden du har, så får du växter som passar. Filter:
@@ -60,7 +62,7 @@ Texterna är egna sammanfattningar och riktlinjer, inte text ur någon bok. Zon,
 
 ## Lägg till eller ändra växter
 
-All växtdata ligger i `plants.js`. Varje växt har bland annat `m` (bästa månader, 1–12), `b` (blommar på årsskott eller fjolårsved) och `t` (beskärningsmetoder), `z` (zon), `ht` (höjd) och `jm` (jordmån), `sun` (ljus), `wat` (vatten) `bt` (blomningstid) `pol` (bra för pollinerare), `jt` (jordtyper) och `hm` (största höjd i meter).
+All växtdata ligger i `plants.js` och klematissorterna i `clematis.js`. Varje växt har bland annat `m` (bästa månader, 1–12), `b` (blommar på årsskott eller fjolårsved) och `t` (beskärningsmetoder), `z` (zon), `ht` (höjd) och `jm` (jordmån), `sun` (ljus), `wat` (vatten) `bt` (blomningstid) `pol` (bra för pollinerare), `jt` (jordtyper) och `hm` (största höjd i meter).
 
 ## Kör lokalt
 
