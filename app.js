@@ -10,7 +10,7 @@
   function saveMine() { try { localStorage.setItem("mine", JSON.stringify(MINE)); } catch (e) {} }
   var tab = "prune";
   var G = { q: "", sun: "", wat: "", jt: "", hm: 0, group: "", prop: "", pol: false, months: [] };
-  function maxZone(p) { var m = /(\d)\s*[–-]\s*(\d)/.exec(p.z || ""); return m ? +m[2] : 8; }
+  function maxZone(p) { var z = p.z || "", m = /(\d)\s*[–-]\s*(\d)/.exec(z) || /^\s*(\d)/.exec(z); return m ? +m[m.length - 1] : 8; }
   var BLOOM = {
     year: ["Blommar på årsskott", "Nya skott bär blommorna, så du kan beskära hårt på vintern eller tidig vår."],
     old: ["Blommar på fjolårsved", "Blomknopparna bildas året innan. Beskär direkt efter blomning, annars tar du bort årets blommor."],

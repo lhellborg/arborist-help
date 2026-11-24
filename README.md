@@ -49,7 +49,7 @@ Välj vilka förhållanden du har, så får du växter som passar. Filter:
 
 **Min trädgård:** i varje växtkort finns knappen "Lägg till i min trädgård". Överst visas då en **blomningskalender** med hur många av dina växter som blommar varje månad. Månader utan blommor (april–oktober) markeras som luckor, med förslag på växter som fyller dem. Tryck på en månad för att filtrera fram växter som blommar då. Listan sparas i telefonen.
 
-Appen har 116 växter: träd, buskar, klätterväxter, häckar och 41 perenner.
+Appen har 130 växter: träd, buskar, klätterväxter, häckar, 39 perenner och 17 kryddväxter.
 
 ## Lägg appen på mobilen
 
