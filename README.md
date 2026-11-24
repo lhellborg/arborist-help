@@ -1,8 +1,47 @@
-# Beskärningshjälpen
+# 🌿 Beskärningshjälpen
 
-Webbapp som visar när och hur man beskär trädgårdsväxter. Sök på växt eller månad (t.ex. "april").
-Fungerar på mobilen och kan läggas på hemskärmen (PWA, funkar offline).
+Webbapp som visar när och hur du beskär trädgårdsväxter.
 
-Växtdata ligger i `plants.js`. Innehållet är egna sammanfattningar och riktlinjer, inte text ur någon bok.
+**👉 Öppna appen: https://lhellborg.github.io/arborist-help/**
 
-Kör lokalt: `python3 -m http.server` och öppna http://localhost:8000
+## Så använder du appen
+
+**Sök växt:** skriv i sökrutan, till exempel `rosor`, `äpple` eller ett latinskt namn.
+
+**Sök månad:** skriv en månad, till exempel `april`, så visas de växter som passar bäst att beskära då. Du kan också trycka på en månadsknapp. Nuvarande månad är fetmarkerad. Tryck igen för att ta bort filtret.
+
+**Filtrera grupp:** välj en grupp i listan under månadsknapparna, till exempel Fruktträd, Rosor eller Häckar.
+
+**Läs mer om en växt:** tryck på växtens kort. Där finns:
+- **Blomning:** om växten blommar på årsskott eller fjolårsved. Det avgör om du ska beskära före eller efter blomning.
+- **När:** bästa tidpunkt.
+- **Hur:** hur du beskär.
+- **Metoder:** vilka av grundmetoderna som gäller.
+- **📷 Se bilder:** en bildsökning på växten.
+
+Månadsremsan på varje kort visar bästa månader (januari–december).
+
+**Guiden:** överst finns "✂️ Så beskär du" med enkla bilder av fem grundmetoder: snitt ovanför knopp, tunna ut vid basen, ner till marken, häckklippning samt borttagning av död och korsande ved.
+
+## Lägg appen på mobilen
+
+- **iPhone (Safari):** Dela → Lägg till på hemskärmen.
+- **Android (Chrome):** menyn ⋮ → Installera app.
+
+Appen sparas i telefonen och fungerar även utan nät.
+
+## Om innehållet
+
+Texterna är egna sammanfattningar och riktlinjer, inte text ur någon bok. Anpassa efter din odlingszon, växtens ålder och vädret. Jämför gärna med din egen beskärningsbok.
+
+## Lägg till eller ändra växter
+
+All växtdata ligger i `plants.js`. Varje växt har bland annat `m` (bästa månader, 1–12), `b` (blommar på årsskott eller fjolårsved) och `t` (beskärningsmetoder).
+
+## Kör lokalt
+
+```
+python3 -m http.server
+```
+
+Öppna sedan http://localhost:8000
