@@ -3,6 +3,11 @@
   var SHORT = MONTHS.map(function (m) { return m.slice(0, 3); });
   var plants = window.PLANTS.slice().sort(function (a, b) { return a.n.localeCompare(b.n, "sv"); });
   var state = { month: 0, group: "", q: "" };
+  var BLOOM = {
+    year: ["Blommar på årsskott", "Nya skott bär blommorna, så du kan beskära hårt på vintern eller tidig vår."],
+    old: ["Blommar på fjolårsved", "Blomknopparna bildas året innan. Beskär direkt efter blomning, annars tar du bort årets blommor."],
+    both: ["Blommar på både fjolårsved och årsskott", "Första blomningen sitter på fjolårsved och senare blommor på nya skott, så beskär lätt."]
+  };
   var now = new Date().getMonth() + 1;
 
   var $q = document.getElementById("q"), $months = document.getElementById("months"),
@@ -61,8 +66,9 @@
       return '<details class="card"' + (res.length === 1 ? " open" : "") + '><summary>' +
         '<div class="name">' + p.n + '</div><div class="latin">' + p.l + '</div>' +
         '<div class="tag">' + p.g + '</div>' +
+        (p.b ? '<div class="bloom ' + p.b + '">🌸 ' + BLOOM[p.b][0] + '</div>' : '') +
         '<div class="strip">' + strip + '</div><div class="strip-l">' + lab + '</div></summary>' +
-        '<div class="body"><h3>När</h3><p>' + p.w + '</p><h3>Hur</h3><p>' + p.h + '</p></div></details>';
+        '<div class="body">' + (p.b ? '<h3>Blomning</h3><p>' + BLOOM[p.b][0] + '. ' + BLOOM[p.b][1] + '</p>' : '') + '<h3>När</h3><p>' + p.w + '</p><h3>Hur</h3><p>' + p.h + '</p></div></details>';
     }).join("");
   }
 
