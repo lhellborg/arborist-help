@@ -75,3 +75,9 @@ input[type=checkbox]{width:auto}
 .sug,.mrm{font:inherit;font-size:.85rem;padding:4px 10px;margin:2px 2px 2px 0;border:1px solid var(--line);border-radius:999px;background:var(--bg);color:var(--fg);cursor:pointer}
 .sug{border-color:var(--accent);color:var(--accent)}
 @media(prefers-color-scheme:dark){.mbar{background:#f06595}}
+
+.sw{position:relative}
+.sugbox{position:absolute;left:0;right:0;top:100%;margin:2px 0 0;padding:4px;list-style:none;background:var(--card);border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 20px rgba(0,0,0,.25);z-index:30;max-height:55vh;overflow:auto}
+.sugbox li{padding:8px 10px;border-radius:8px;cursor:pointer;display:flex;flex-direction:column}
+.sugbox li.on,.sugbox li:hover{background:var(--bg)}
+.sl{font-weight:600}.ss{font-size:.8rem;color:var(--muted)}

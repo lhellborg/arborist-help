@@ -107,6 +107,72 @@
   $group.addEventListener("change", function () { state.group = $group.value; render(); });
 
 
+
+  // ---------- Förslag när man skriver ----------
+  function attachSuggest(input, withMonths) {
+    var box = document.createElement("ul");
+    box.className = "sugbox"; box.hidden = true; box.setAttribute("role", "listbox");
+    input.parentNode.appendChild(box);
+    input.setAttribute("autocomplete", "off");
+    var items = [], idx = -1, skip = false;
+    function hide() { box.hidden = true; idx = -1; }
+    function score(p, q) {
+      var n = norm(p.n), l = norm(p.l);
+      if (n.indexOf(q) === 0) return 0;
+      if (n.split(/[\s(–-]+/).some(function (w) { return w.indexOf(q) === 0; })) return 1;
+      if (n.indexOf(q) >= 0) return 2;
+      if (l.split(/[\s×/]+/).some(function (w) { return w.indexOf(q) === 0; })) return 3;
+      return -1;
+    }
+    function build() {
+      if (skip) { skip = false; return; }
+      var q = norm(input.value);
+      items = [];
+      if (q.length >= 1) {
+        if (withMonths && q.length >= 2) MONTHS.forEach(function (m, i) {
+          if (m.indexOf(q) === 0) items.push({ label: cap(m), sub: "Visa växter att beskära i " + m, value: m });
+        });
+        plants.map(function (p) { return { p: p, s: score(p, q) }; })
+          .filter(function (x) { return x.s >= 0; })
+          .sort(function (a, b) { return a.s - b.s || a.p.n.localeCompare(b.p.n, "sv"); })
+          .slice(0, 6)
+          .forEach(function (x) { items.push({ label: x.p.n, sub: x.p.l + " · " + x.p.g, value: x.p.n }); });
+      }
+      idx = -1;
+      if (!items.length) { hide(); return; }
+      box.innerHTML = items.map(function (it, k) {
+        return '<li role="option" data-k="' + k + '"><span class="sl">' + it.label + '</span><span class="ss">' + it.sub + '</span></li>';
+      }).join("");
+      box.hidden = false;
+    }
+    function pick(k) {
+      if (!items[k]) return;
+      skip = true;
+      input.value = items[k].value;
+      hide();
+      input.dispatchEvent(new Event("input"));
+      skip = false;
+      input.blur();
+    }
+    function mark() {
+      Array.prototype.forEach.call(box.children, function (li, k) { li.classList.toggle("on", k === idx); });
+    }
+    input.addEventListener("input", build);
+    input.addEventListener("focus", build);
+    input.addEventListener("blur", function () { setTimeout(hide, 120); });
+    input.addEventListener("keydown", function (e) {
+      if (box.hidden) return;
+      if (e.key === "ArrowDown") { idx = (idx + 1) % items.length; mark(); e.preventDefault(); }
+      else if (e.key === "ArrowUp") { idx = (idx - 1 + items.length) % items.length; mark(); e.preventDefault(); }
+      else if (e.key === "Enter" && idx >= 0) { pick(idx); e.preventDefault(); }
+      else if (e.key === "Escape") hide();
+    });
+    box.addEventListener("pointerdown", function (e) {
+      var li = e.target.closest("li");
+      if (li) { e.preventDefault(); pick(+li.dataset.k); }
+    });
+  }
+
   // ---------- Flikar ----------
   function showTab(t) {
     tab = t === "garden" ? "garden" : "prune";
@@ -273,6 +339,8 @@
   setZone(state.zone);
   buildControls();
   buildGarden();
+  attachSuggest($q, true);
+  attachSuggest($gq, false);
   showTab(location.hash === "#tradgard" ? "garden" : "prune");
   if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(function () {});
 })();

@@ -8,7 +8,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icon.svg">
-<link rel="stylesheet" href="style.css?v=9">
+<link rel="stylesheet" href="style.css?v=10">
 </head>
 <body>
 <header>
@@ -18,7 +18,7 @@
     <button id="tabGarden" class="tab" role="tab" type="button">🌱 Trädgårdshjälpen</button>
   </nav>
   <div id="pruneCtl">
-    <input id="q" type="search" placeholder="Sök växt eller månad, t.ex. rosor eller april" autocomplete="off" aria-label="Sök">
+    <div class="sw"><input id="q" type="search" placeholder="Sök växt eller månad, t.ex. rosor eller april" autocomplete="off" aria-label="Sök"></div>
     <div id="months" class="chips" role="group" aria-label="Månad"></div>
     <div class="row">
       <select id="group" aria-label="Växtgrupp"></select>
@@ -80,7 +80,7 @@
 <section id="gardenView" hidden>
 <div class="gctl card">
   <div class="gtitle">Hitta växter till din trädgård</div>
-  <input id="gq" type="search" placeholder="Sök växt, t.ex. lavendel" autocomplete="off" aria-label="Sök växt">
+  <div class="sw"><input id="gq" type="search" placeholder="Sök växt, t.ex. lavendel" autocomplete="off" aria-label="Sök växt"></div>
   <div class="grid2">
     <label>Ljus<select id="gsun"><option value="">Alla</option><option value="s">☀️ Sol</option><option value="h">⛅ Halvskugga</option><option value="k">☁️ Skugga</option></select></label>
     <label>Jordfuktighet<select id="gwat"><option value="">Alla</option><option value="d">🌵 Torr</option><option value="m">💧 Normal</option><option value="w">💦 Fuktig</option></select></label>
@@ -98,7 +98,7 @@
 <main id="glist"></main>
 </section>
 <footer>Egna sammanfattningar som riktlinjer. Anpassa efter din zon, växtens ålder och väder.</footer>
-<script src="plants.js?v=9"></script>
-<script src="app.js?v=9"></script>
+<script src="plants.js?v=10"></script>
+<script src="app.js?v=10"></script>
 </body>
 </html>
