@@ -81,7 +81,6 @@
   $q.addEventListener("input", function () { state.q = $q.value; if (monthFromQuery($q.value)) state.month = 0; render(); });
   $group.addEventListener("change", function () { state.group = $group.value; render(); });
 
-  $zone.innerHTML = '<option value="0">Alla zoner</option>' + [1,2,3,4,5,6,7,8].map(function (z) { return '<option value="' + z + '">Min zon: ' + z + '</option>'; }).join("");
   $zone.value = String(state.zone);
   $zone.addEventListener("change", function () { state.zone = +$zone.value; try { localStorage.setItem("zone", state.zone); } catch (e) {} render(); });
   buildControls();

@@ -8,7 +8,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icon.svg">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v=3">
 </head>
 <body>
 <header>
@@ -17,7 +17,7 @@
   <div id="months" class="chips" role="group" aria-label="Månad"></div>
   <div class="row">
     <select id="group" aria-label="Växtgrupp"></select>
-    <select id="zone" aria-label="Odlingszon"></select>
+    <select id="zone" aria-label="Odlingszon"><option value="0">Alla zoner</option><option value="1">Min zon: 1</option><option value="2">Min zon: 2</option><option value="3">Min zon: 3</option><option value="4">Min zon: 4</option><option value="5">Min zon: 5</option><option value="6">Min zon: 6</option><option value="7">Min zon: 7</option><option value="8">Min zon: 8</option></select>
     <span id="count"></span>
   </div>
 </header>
@@ -69,7 +69,7 @@
 </div></details>
 <main id="list"></main>
 <footer>Egna sammanfattningar som riktlinjer. Anpassa efter din zon, växtens ålder och väder.</footer>
-<script src="plants.js"></script>
-<script src="app.js"></script>
+<script src="plants.js?v=3"></script>
+<script src="app.js?v=3"></script>
 </body>
 </html>
